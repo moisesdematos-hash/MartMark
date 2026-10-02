@@ -8,11 +8,11 @@
 4. `npm test` verifies that Phase 0 does not announce production readiness and keeps financial operations disabled.
 5. `npm audit --audit-level=high` checks dependency advisories in CI.
 6. `npm run build` creates the Worker output.
-7. `npm run test:integration` imports the built Worker and confirms it exports a callable `fetch` handler.
+7. `npm run test:integration` starts Wrangler's local Cloudflare runtime and confirms the built Worker serves the MartMark page.
 
 ## Current evidence
 
-The lint, typecheck, unit tests, build and built-entrypoint integration check passed locally for this source state. GitHub CI has not run because the repository connection is not active.
+On 2026-10-03, a clean temporary install passed lint, typecheck, all unit tests, the high-severity dependency audit, build and the Worker runtime integration check. The GitHub workflow still needs to run against this updated source revision.
 
 ## Later phase coverage
 

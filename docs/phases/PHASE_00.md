@@ -23,8 +23,8 @@ Establish the project inventory, canonical system boundaries, environment plan, 
 - A fresh Vinext starter was initialized with a portable execution profile.
 - The starter includes React, TypeScript, Tailwind, accessible sidebar primitives, and a Cloudflare-compatible deployment path.
 - There was no existing application, schema, migration, CI pipeline, provider configuration, test suite or environment file to preserve.
-- Installed the locked dependencies; `npm run lint`, `npm run typecheck` and `npm run build` pass for the current source.
-- Added a least-privilege GitHub Actions workflow, Dependabot update configuration, three unit tests for readiness gates, and a built Worker entrypoint integration check.
+- Updated vulnerable framework and runtime dependencies, aligned the Cloudflare plugin and Workers types, and refreshed the lockfile.
+- Added a least-privilege GitHub Actions workflow, Dependabot update configuration, three unit tests for readiness gates, and a built Worker runtime integration check.
 
 ## KEEP / REFACTOR / REPLACE / REMOVE
 
@@ -42,7 +42,7 @@ Establish the project inventory, canonical system boundaries, environment plan, 
 
 ## Environment variables
 
-An empty `.env.example` lists planned public Supabase values and server-only secrets. No real credentials are configured. Runtime secrets must be added through the hosting environment after their phase is ready.
+The blank `.env.example` lists planned public Supabase values and server-only secrets. Local public Supabase configuration is kept in ignored `.env.local`; no server credentials or hosted secrets are configured. Runtime secrets must be added through the hosting environment after their phase is ready.
 
 ## Migrations
 
@@ -55,8 +55,10 @@ None. No database schema or provider integration is implemented in Phase 0.
 - `npm run typecheck` passes.
 - `npm run build` passes and produces the deployable artifact.
 - `npm test` passes (3 foundation gate tests).
-- `npm run test:integration` passes (built Worker exposes a callable `fetch`).
-- GitHub Actions is connected to the public `moisesdematos-hash/MartMark` repository. The latest run passes lint and typecheck but fails the dependency audit: 21 advisories were reported (1 critical, 9 high, 10 moderate, 1 low). The audit includes the pinned Next.js version. A previous typecheck failure caused by omitted `build/` source files was corrected in the next commit.
+- `npm run test:integration` starts Wrangler's local Cloudflare runtime and confirms that the built Worker serves the MartMark page.
+- A clean temporary install passes lint, typecheck, all 3 unit tests, `npm audit --audit-level=high`, build and the Worker runtime integration test on 2026-10-03.
+- The audit still reports 4 moderate `fflate` findings in `vinext`'s `@vercel/og` chain. Removing them through npm's suggested forced downgrade would replace `vinext` with `0.2.1`, so that breaking downgrade was not applied. The CI threshold is high.
+- The GitHub workflow has not yet run against this working-tree revision. The latest remote run still reflects the older dependency tree and must be rerun after these changes are published.
 - Negative authorization, persistence and concurrency suites are not applicable until their later phases implement those capabilities.
 - No financial or identity assertions are claimed.
 
@@ -82,10 +84,10 @@ None. No database schema or provider integration is implemented in Phase 0.
 ## Blockers
 
 1. The user supplied an existing public GitHub repository; source and CI are connected there. Review rules and GitHub secret scanning have not been configured or verified.
-2. Remote CI is not green. The dependency audit blocks on known vulnerabilities, including a critical Next.js advisory; dependency updates must be reviewed and validated before Phase 0 can pass.
+2. Remote CI still needs to run against this updated dependency tree; the currently published revision has the older failing audit result.
 3. Supabase development/staging and Vercel preview/staging environments are not connected or isolated.
 4. Publishing through the Sites packaging workflow remains blocked because the environment rejected the required repository credential handoff.
 
 ## Remaining debt
 
-Resolve the dependency audit, configure repository security controls, connect and isolate the development/staging services, resolve the Sites publishing credential handoff, and record evidence before marking this phase PASSED. Do not start Phase 1 until every acceptance criterion is satisfied. The MartMark workspace remains a local preview until its source can be packaged and published.
+Confirm the remote CI run, configure repository security controls, connect and isolate the development/staging services, resolve the Sites publishing credential handoff, and record evidence before marking this phase PASSED. Do not start Phase 1 until every acceptance criterion is satisfied. The MartMark workspace remains a local preview until its source can be packaged and published.
