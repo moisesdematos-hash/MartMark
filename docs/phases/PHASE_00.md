@@ -56,6 +56,7 @@ None. No database schema or provider integration is implemented in Phase 0.
 - `npm run build` passes and produces the deployable artifact.
 - `npm test` passes (3 foundation gate tests).
 - `npm run test:integration` passes (built Worker exposes a callable `fetch`).
+- GitHub Actions is connected to the public `moisesdematos-hash/MartMark` repository. The latest run passes lint and typecheck but fails the dependency audit: 21 advisories were reported (1 critical, 9 high, 10 moderate, 1 low). The audit includes the pinned Next.js version. A previous typecheck failure caused by omitted `build/` source files was corrected in the next commit.
 - Negative authorization, persistence and concurrency suites are not applicable until their later phases implement those capabilities.
 - No financial or identity assertions are claimed.
 
@@ -80,10 +81,11 @@ None. No database schema or provider integration is implemented in Phase 0.
 
 ## Blockers
 
-1. GitHub, Vercel and Supabase environments are not connected/configured in this workspace.
-2. The local test harness and CI workflow exist, but remote CI, secret scanning and review policy have not been enabled or observed.
-3. The website source is ready locally, but publishing was blocked because the environment rejected the required private repository credential handoff to the packaging workflow.
+1. The user supplied an existing public GitHub repository; source and CI are connected there. Review rules and GitHub secret scanning have not been configured or verified.
+2. Remote CI is not green. The dependency audit blocks on known vulnerabilities, including a critical Next.js advisory; dependency updates must be reviewed and validated before Phase 0 can pass.
+3. Supabase development/staging and Vercel preview/staging environments are not connected or isolated.
+4. Publishing through the Sites packaging workflow remains blocked because the environment rejected the required repository credential handoff.
 
 ## Remaining debt
 
-Connect the GitHub account so the workflow can run on the repository, enable repository security controls, connect and isolate the development/staging services, and record evidence before marking this phase PASSED. Do not start Phase 1 until every acceptance criterion is satisfied. The MartMark workspace in this delivery remains a local preview until its source can be packaged and published.
+Resolve the dependency audit, configure repository security controls, connect and isolate the development/staging services, resolve the Sites publishing credential handoff, and record evidence before marking this phase PASSED. Do not start Phase 1 until every acceptance criterion is satisfied. The MartMark workspace remains a local preview until its source can be packaged and published.
