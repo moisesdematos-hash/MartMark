@@ -12,7 +12,7 @@
 
 ## Current evidence
 
-On 2026-10-03, a clean temporary install passed lint, typecheck, all unit tests, the high-severity dependency audit, build and the Worker runtime integration check. The GitHub workflow still needs to run against this updated source revision.
+On 2026-10-03, GitHub Actions run 10 passed clean install, lint, typecheck, all unit tests, the high-severity dependency audit, build and the Worker runtime integration check on the remediation PR. The default branch still needs that PR merged.
 
 ## Later phase coverage
 
