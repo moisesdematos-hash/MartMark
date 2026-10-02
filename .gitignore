@@ -45,7 +45,6 @@ next-env.d.ts
 /outputs/
 /work/
 
-# Local framework output
-/build/
+# TypeScript incremental state
 *.tsbuildinfo
 
