@@ -53,6 +53,3 @@ jobs:
         run: npm run test:integration
       - name: Vercel Next.js build
         run: npm run build:vercel
-      - name: Vercel preview build
-        run: npm run build:vercel
-
