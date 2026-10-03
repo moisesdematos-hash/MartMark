@@ -4,7 +4,7 @@
 
 `IN_PROGRESS`
 
-Phase 0 is not PASSED. CI is green on `main`, an active ruleset protects `main` with pull-request and CI requirements, and Gitleaks scans pull requests and `main`. PR #12 added the native Next.js Vercel build to CI; it passed on Linux and was merged at `1ecef20`. The `martmark` Vercel project was briefly connected to GitHub, but the connection was removed after GitHub Dependabot branches unexpectedly produced deployments marked as Production. All six deployments created during that connection were deleted; no deployments or active Vercel URLs remain. Automatic Git deployments are disabled in `vercel.json` until the Phase 0 gate passes. GitHub's native secret scanning runs automatically because the repository is public; user-level push protection is on by default for public repositories. The actual push-protection setting and alert state have not been inspected. A separate Supabase staging project is configured in Vercel's Preview environment with public values only; its Auth health endpoint responded successfully. No preview deployment exists yet. Vercel staging/rollback validation, private Sites publication, and approval/recovery evidence remain open.
+Phase 0 is not PASSED. CI is green on `main`, an active ruleset protects `main` with pull-request and CI requirements, and Gitleaks scans pull requests and `main`. PR #12 added the native Next.js Vercel build to CI; it passed on Linux and was merged at `1ecef20`. The `martmark` Vercel project was briefly connected to GitHub, but the connection was removed after GitHub Dependabot branches unexpectedly produced deployments marked as Production. All six deployments created during that connection were deleted; no deployments or active Vercel URLs remain. Automatic Git deployments are disabled in `vercel.json` until the Phase 0 gate passes. GitHub's native secret scanning runs automatically because the repository is public; user-level push protection is on by default for public repositories. The repository settings page confirms Secret Protection and push protection are enabled; the secret-scanning page reports zero open alerts (verified 2026-10-03). A separate Supabase staging project is configured in Vercel's Preview environment with public values only; its Auth health endpoint responded successfully. No preview deployment exists yet. Vercel staging/rollback validation, private Sites publication, and approval/recovery evidence remain open.
 
 ## Objective
 
@@ -70,7 +70,7 @@ None. No database schema or provider integration is implemented in Phase 0.
 - Financial and KYC actions remain unavailable.
 - The RLS document is a draft planning matrix, not deployed policy.
 - An active GitHub ruleset protects `main`: pull requests and `Validate application` are required, deletion and non-fast-forward updates are blocked, and no bypass actors are configured. It does not require an approval review.
-- The Gitleaks scan runs in the CI workflow. GitHub documents that secret scanning runs automatically on public repositories, and user-level push protection is on by default for public repositories; the account/repository setting and alert state are not readable through the connected GitHub API, so they still require confirmation in the UI. Rate limits, threat model, webhook verification and audit persistence also remain open.
+- The Gitleaks scan runs in the CI workflow. The repository settings show Secret Protection and push protection enabled, and the secret-scanning page reports zero open alerts (verified 2026-10-03). Rate limits, threat model, webhook verification and audit persistence also remain open.
 
 ## Acceptance criteria
 
@@ -78,7 +78,7 @@ None. No database schema or provider integration is implemented in Phase 0.
 - [x] Intended architecture and environment boundaries documented.
 - [x] Initial RLS matrix and secret naming plan documented.
 - [x] Active GitHub ruleset on `main` requires a pull request and the `Validate application` check, and blocks deletion and non-fast-forward updates.
-- [ ] Confirm the native GitHub secret scanning alert state and push protection setting in the repository UI. GitHub documents automatic secret scanning for public repositories and default user-level push protection for public repositories.
+- [x] Confirm the native GitHub secret scanning alert state and push protection setting in the repository UI. Secret Protection and push protection are enabled; there are zero open secret-scanning alerts (verified 2026-10-03).
 - [x] CI, Gitleaks scanning and dependency audits configured; post-merge main run `37147962904` passes.
 - [x] Application lint, typecheck and production build pass.
 - [x] Supabase development and staging projects are separate. The staging URL and publishable key are configured only in Vercel Preview; the endpoint returned HTTP 200. No service-role key was supplied or configured.
@@ -87,7 +87,7 @@ None. No database schema or provider integration is implemented in Phase 0.
 
 ## Blockers
 
-1. Gitleaks scans the PR and `main` in CI. GitHub documents automatic native secret scanning and default user-level push protection for public repositories, but the connected API cannot confirm the account/repository setting or alert state.
+1. Gitleaks scans pull requests and `main` in CI; GitHub Secret Protection and push protection are enabled, with zero open secret-scanning alerts (verified 2026-10-03).
 2. Supabase development and staging are separate and the staging public values are configured in Vercel Preview. Vercel Git is disconnected, so no preview/staging deployment or rollback validation exists.
 3. The private Sites version has not been packaged or published; the sandbox blocked passing its temporary source credential to the workflow over stdin.
 4. Required approval, backup/restore and recovery evidence is not recorded.
