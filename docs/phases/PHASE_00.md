@@ -4,7 +4,7 @@
 
 `IN_PROGRESS`
 
-Phase 0 is not PASSED. External accounts, staging resources, CI and the security/test gates have not been established.
+Phase 0 is not PASSED. Baseline CI is configured, but the post-merge main run exposed an unresolved development-tool advisory. Repository security controls, isolated staging resources, deployment previews and approval/recovery evidence remain open.
 
 ## Objective
 
@@ -57,8 +57,8 @@ None. No database schema or provider integration is implemented in Phase 0.
 - `npm test` passes (3 foundation gate tests).
 - `npm run test:integration` starts Wrangler's local Cloudflare runtime and confirms that the built Worker serves the MartMark page.
 - A clean temporary install passes lint, typecheck, all 3 unit tests, `npm audit --audit-level=high`, build and the Worker runtime integration test on 2026-10-03.
-- The audit still reports 4 moderate `fflate` findings in `vinext`'s `@vercel/og` chain. Removing them through npm's suggested forced downgrade would replace `vinext` with `0.2.1`, so that breaking downgrade was not applied. The CI threshold is high.
-- GitHub Actions run 10 completed successfully on the Phase 0 remediation PR, including clean install, lint, typecheck, unit tests, high-severity audit, build and runtime integration. The `main` branch still needs the PR merge before its CI reflects these updates.
+- The full dependency audit reports moderate `fflate` findings in `vinext`'s `@vercel/og` chain and a high `braces` advisory (GHSA-vfj7-8cjw-p6xm) in development/build tooling. GitHub's advisory lists no patched version as of 2026-10-03. The production-only audit passes with zero vulnerabilities. The full audit stays visible as an advisory while the production audit remains blocking. The CI threshold is high.
+- GitHub Actions runs 10 and 11 passed on PR #6. PR #6 was merged into `main` at commit `b11aa88` on 2026-10-03. The first post-merge run (run 12) passed install, lint, typecheck and unit tests, then failed at the full dependency audit; build and integration steps were skipped. The failure was the high `braces` advisory noted above. The production-only audit returned zero vulnerabilities.
 - Negative authorization, persistence and concurrency suites are not applicable until their later phases implement those capabilities.
 - No financial or identity assertions are claimed.
 
@@ -83,11 +83,11 @@ None. No database schema or provider integration is implemented in Phase 0.
 
 ## Blockers
 
-1. The user supplied an existing public GitHub repository; source and CI are connected there. Review rules and GitHub secret scanning have not been configured or verified.
-2. The remediation PR's CI is green; merge it before treating the default branch's CI as current.
+1. The public GitHub repository has no verified branch protection/review policy, secret scanning or push protection.
+2. The post-merge `main` CI run failed at the full dependency audit because of an unpatched high advisory in development/build tooling; a production-only audit passed with zero vulnerabilities.
 3. Supabase development/staging and Vercel preview/staging environments are not connected or isolated.
 4. Publishing through the Sites packaging workflow remains blocked because the environment rejected the required repository credential handoff.
 
 ## Remaining debt
 
-Merge the green remediation PR, configure repository security controls, connect and isolate the development/staging services, resolve the Sites publishing credential handoff, and record evidence before marking this phase PASSED. Do not start Phase 1 until every acceptance criterion is satisfied. The MartMark workspace remains a local preview until its source can be packaged and published.
+Verify the updated CI audit policy, configure repository security controls, connect and isolate the development/staging services, resolve the Sites publishing credential handoff, and record evidence before marking this phase PASSED. Do not start Phase 1 until every acceptance criterion is satisfied. The MartMark workspace remains a local preview until its source can be packaged and published.
