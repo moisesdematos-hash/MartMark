@@ -4,7 +4,7 @@
 
 `IN_PROGRESS`
 
-Phase 0 is not PASSED. Baseline CI is configured, but the post-merge main run exposed an unresolved development-tool advisory. Repository security controls, isolated staging resources, deployment previews and approval/recovery evidence remain open.
+Phase 0 is not PASSED. CI is green on `main`, and an active ruleset protects `main` with pull-request and CI requirements. Secret scanning, isolated Supabase staging, Vercel preview/staging, private Sites publication, and approval/recovery evidence remain open.
 
 ## Objective
 
@@ -58,7 +58,8 @@ None. No database schema or provider integration is implemented in Phase 0.
 - `npm run test:integration` starts Wrangler's local Cloudflare runtime and confirms that the built Worker serves the MartMark page.
 - A clean temporary install passes lint, typecheck, all 3 unit tests, `npm audit --audit-level=high`, build and the Worker runtime integration test on 2026-10-03.
 - The full dependency audit reports moderate `fflate` findings in `vinext`'s `@vercel/og` chain and a high `braces` advisory (GHSA-vfj7-8cjw-p6xm) in development/build tooling. GitHub's advisory lists no patched version as of 2026-10-03. The production-only audit passes with zero vulnerabilities. The full audit stays visible as an advisory while the production audit remains blocking. The CI threshold is high.
-- GitHub Actions runs 10 and 11 passed on PR #6. PR #6 was merged into `main` at commit `b11aa88` on 2026-10-03. The first post-merge run (run 12) passed install, lint, typecheck and unit tests, then failed at the full dependency audit; build and integration steps were skipped. The failure was the high `braces` advisory noted above. The production-only audit returned zero vulnerabilities.
+- GitHub Actions runs 10 and 11 passed on PR #6. PR #6 was merged into `main` at commit `b11aa88` on 2026-10-03. The first post-merge run (run 12) passed install, lint, typecheck and unit tests, then failed at the full dependency audit; build and integration steps were skipped because of the high `braces` advisory noted above. The production-only audit returned zero vulnerabilities.
+- PR #7 merged the audit policy into `main` at commit `74dec89` on 2026-10-03. Main CI run 17 (`37140887773`) passed clean install, lint, typecheck, unit tests, production audit, advisory full audit, build and integration checks.
 - Negative authorization, persistence and concurrency suites are not applicable until their later phases implement those capabilities.
 - No financial or identity assertions are claimed.
 
@@ -67,15 +68,17 @@ None. No database schema or provider integration is implemented in Phase 0.
 - No provider credentials or personal data are present in the application.
 - Financial and KYC actions remain unavailable.
 - The RLS document is a draft planning matrix, not deployed policy.
-- Secret scanning, CI, rate limits, threat model, webhook verification and audit persistence remain open.
+- An active GitHub ruleset protects `main`: pull requests and `Validate application` are required, deletion and non-fast-forward updates are blocked, and no bypass actors are configured. It does not require an approval review.
+- Secret scanning/push protection, rate limits, threat model, webhook verification and audit persistence remain open.
 
 ## Acceptance criteria
 
 - [x] Repository inventory performed for the new workspace.
 - [x] Intended architecture and environment boundaries documented.
 - [x] Initial RLS matrix and secret naming plan documented.
-- [ ] GitHub repository and review policy configured.
-- [ ] CI and dependency/secret scanning are configured and pass remotely.
+- [x] Active GitHub ruleset on `main` requires a pull request and the `Validate application` check, and blocks deletion and non-fast-forward updates.
+- [ ] GitHub secret scanning and push protection enabled and verified.
+- [x] CI and dependency audits configured; post-merge main run 17 passes.
 - [x] Application lint, typecheck and production build pass.
 - [ ] Supabase development and staging environments created and isolated.
 - [ ] Vercel preview/staging configuration and rollback documented.
@@ -83,11 +86,11 @@ None. No database schema or provider integration is implemented in Phase 0.
 
 ## Blockers
 
-1. The public GitHub repository has no verified branch protection/review policy, secret scanning or push protection.
-2. The post-merge `main` CI run failed at the full dependency audit because of an unpatched high advisory in development/build tooling; a production-only audit passed with zero vulnerabilities.
-3. Supabase development/staging and Vercel preview/staging environments are not connected or isolated.
-4. Publishing through the Sites packaging workflow remains blocked because the environment rejected the required repository credential handoff.
+1. GitHub secret scanning and push protection are not yet verified.
+2. Supabase development/staging and Vercel preview/staging are not connected or isolated.
+3. The private Sites version has not been packaged or published; the sandbox blocked passing its temporary source credential to the workflow over stdin.
+4. Required approval, backup/restore and recovery evidence is not recorded.
 
 ## Remaining debt
 
-Verify the updated CI audit policy, configure repository security controls, connect and isolate the development/staging services, resolve the Sites publishing credential handoff, and record evidence before marking this phase PASSED. Do not start Phase 1 until every acceptance criterion is satisfied. The MartMark workspace remains a local preview until its source can be packaged and published.
+Enable and verify secret scanning/push protection, connect isolated Supabase development/staging and Vercel preview/staging, complete owner-private Sites packaging/publication, and record approval and recovery evidence before marking this phase PASSED. Do not start Phase 1 until every acceptance criterion is satisfied. The MartMark workspace remains a local preview until the private Sites version is successfully published.
