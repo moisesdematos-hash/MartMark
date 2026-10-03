@@ -25,4 +25,3 @@ The Foundation interface is running as a local preview in Codex. Its source is r
 ## Blocker
 
 The local source packaging workflow was blocked when the environment rejected the required private repository credential handoff. The Vercel project also needs its GitHub connection, a passing Vercel build, and isolated Supabase staging before preview validation. No deployment URL is available.
-
