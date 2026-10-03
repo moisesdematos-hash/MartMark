@@ -4,7 +4,7 @@
 
 `IN_PROGRESS`
 
-Phase 0 is not PASSED. CI is green on `main`, an active ruleset protects `main` with pull-request and CI requirements, and Gitleaks scans pull requests and `main`. PR #12 added the native Next.js Vercel build to CI; it passed on Linux and was merged at `1ecef20`. The `martmark` Vercel project was briefly connected to GitHub, but the connection was removed after GitHub Dependabot branches unexpectedly produced deployments marked as Production. All six deployments created during that connection were deleted; no deployments or active Vercel URLs remain. Automatic Git deployments are disabled in `vercel.json` until the Phase 0 gate passes. GitHub's native secret scanning runs automatically because the repository is public; user-level push protection is on by default for public repositories. The actual push-protection setting and alert state have not been inspected. Isolated Supabase staging, Vercel staging/rollback validation, private Sites publication, and approval/recovery evidence remain open.
+Phase 0 is not PASSED. CI is green on `main`, an active ruleset protects `main` with pull-request and CI requirements, and Gitleaks scans pull requests and `main`. PR #12 added the native Next.js Vercel build to CI; it passed on Linux and was merged at `1ecef20`. The `martmark` Vercel project was briefly connected to GitHub, but the connection was removed after GitHub Dependabot branches unexpectedly produced deployments marked as Production. All six deployments created during that connection were deleted; no deployments or active Vercel URLs remain. Automatic Git deployments are disabled in `vercel.json` until the Phase 0 gate passes. GitHub's native secret scanning runs automatically because the repository is public; user-level push protection is on by default for public repositories. The actual push-protection setting and alert state have not been inspected. A separate Supabase staging project is configured in Vercel's Preview environment with public values only; its Auth health endpoint responded successfully. No preview deployment exists yet. Vercel staging/rollback validation, private Sites publication, and approval/recovery evidence remain open.
 
 ## Objective
 
@@ -81,17 +81,17 @@ None. No database schema or provider integration is implemented in Phase 0.
 - [ ] Confirm the native GitHub secret scanning alert state and push protection setting in the repository UI. GitHub documents automatic secret scanning for public repositories and default user-level push protection for public repositories.
 - [x] CI, Gitleaks scanning and dependency audits configured; post-merge main run `37147962904` passes.
 - [x] Application lint, typecheck and production build pass.
-- [ ] Supabase development and staging environments created and isolated.
+- [x] Supabase development and staging projects are separate. The staging URL and publishable key are configured only in Vercel Preview; the endpoint returned HTTP 200. No service-role key was supplied or configured.
 - [ ] Vercel preview/staging configuration and rollback documented. Automatic Git deployments are disabled and the project is disconnected; staging validation and rollback runbook remain open.
 - [ ] Required test harnesses, evidence and recovery expectations agreed and recorded.
 
 ## Blockers
 
 1. Gitleaks scans the PR and `main` in CI. GitHub documents automatic native secret scanning and default user-level push protection for public repositories, but the connected API cannot confirm the account/repository setting or alert state.
-2. Isolated Supabase development/staging is not configured. The Next.js build passed in CI, but Vercel Git is disconnected and no preview/staging deployment or rollback validation exists.
+2. Supabase development and staging are separate and the staging public values are configured in Vercel Preview. Vercel Git is disconnected, so no preview/staging deployment or rollback validation exists.
 3. The private Sites version has not been packaged or published; the sandbox blocked passing its temporary source credential to the workflow over stdin.
 4. Required approval, backup/restore and recovery evidence is not recorded.
 
 ## Remaining debt
 
-Confirm the native GitHub security state in the repository UI, connect isolated Supabase development/staging, configure and validate Vercel preview/staging and document rollback, complete owner-private Sites packaging/publication, and record approval and recovery evidence before marking this phase PASSED. Do not start Phase 1 until every acceptance criterion is satisfied. The MartMark workspace remains a local preview until the private Sites version is successfully published.
+Confirm the native GitHub security state in the repository UI, validate a Vercel preview/staging deployment and document rollback, complete owner-private Sites packaging/publication, and record approval and recovery evidence before marking this phase PASSED. Do not start Phase 1 until every acceptance criterion is satisfied. The MartMark workspace remains a local preview until the private Sites version is successfully published.
