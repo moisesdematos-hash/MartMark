@@ -12,6 +12,7 @@ The Foundation interface is running as a local preview in Codex. Its source is r
 
 - Created the `martmark` Vercel project in the authenticated personal account and linked the local repository directory to it.
 - The Vercel config selects the native Next.js framework and runs `npm run build:vercel` (`next build`); the Codex local preview continues to use Vinext and Cloudflare.
+- A separate Supabase staging project is configured with `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` in Vercel's Preview environment only. Its Auth health endpoint returned HTTP 200. Production has no Supabase values.
 - Automatic Git deployments are disabled in `vercel.json` until the Phase 0 release gate is passed. The Vercel project is currently disconnected from GitHub.
 - PR #12's Linux CI passed the native Next.js build and was merged at `1ecef20`. The six deployments created during the Git connection attempt were removed, including deployments marked as Production. No manual deployment was started.
 
@@ -24,4 +25,4 @@ The Foundation interface is running as a local preview in Codex. Its source is r
 
 ## Blocker
 
-The local source packaging workflow was blocked when the environment rejected the required private repository credential handoff. Isolated Supabase staging, a Vercel preview/staging deployment, rollback validation and a deployment URL are still unavailable. Reconnect Git only after preview and production branch behavior is verified.
+The local source packaging workflow was blocked when the environment rejected the required private repository credential handoff. The Supabase staging endpoint is reachable and separate from development. A Vercel preview/staging deployment, rollback validation and a deployment URL are still unavailable. Reconnect Git only after preview and production branch behavior is verified.
