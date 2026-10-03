@@ -2,7 +2,7 @@
 
 ## Intended platform architecture
 
-The requested V1 target is GitHub Actions → Vercel previews/staging/production → isolated Supabase environments. The `martmark` Vercel project is connected to the `moisesdematos-hash/MartMark` GitHub repository. No Vercel deployment has been created yet; the Phase 0 gate is still open.
+The requested V1 target is GitHub Actions → Vercel previews/staging/production → isolated Supabase environments. The `martmark` Vercel project was briefly connected to the `moisesdematos-hash/MartMark` GitHub repository. GitHub Dependabot branches unexpectedly produced deployments marked as Production, so the Git connection was removed and all six deployments created during the connection were deleted. No deployment is currently available; the Phase 0 gate is still open.
 
 ## Current preview
 
@@ -12,8 +12,8 @@ The Foundation interface is running as a local preview in Codex. Its source is r
 
 - Created the `martmark` Vercel project in the authenticated personal account and linked the local repository directory to it.
 - The Vercel config selects the native Next.js framework and runs `npm run build:vercel` (`next build`); the Codex local preview continues to use Vinext and Cloudflare.
-- Automatic Git deployments from `main` are disabled in `vercel.json` until the Phase 0 release gate is passed. The repository is connected, so other branches are eligible for previews.
-- PR #12's Linux CI passed the native Next.js build and was merged at `1ecef20`. The Vercel project currently has no deployments. No manual deployment was started.
+- Automatic Git deployments are disabled in `vercel.json` until the Phase 0 release gate is passed. The Vercel project is currently disconnected from GitHub.
+- PR #12's Linux CI passed the native Next.js build and was merged at `1ecef20`. The six deployments created during the Git connection attempt were removed, including deployments marked as Production. No manual deployment was started.
 
 ## Release policy
 
@@ -24,4 +24,4 @@ The Foundation interface is running as a local preview in Codex. Its source is r
 
 ## Blocker
 
-The local source packaging workflow was blocked when the environment rejected the required private repository credential handoff. Isolated Supabase staging, a Vercel preview/staging deployment, rollback validation and a deployment URL are still unavailable.
+The local source packaging workflow was blocked when the environment rejected the required private repository credential handoff. Isolated Supabase staging, a Vercel preview/staging deployment, rollback validation and a deployment URL are still unavailable. Reconnect Git only after preview and production branch behavior is verified.
