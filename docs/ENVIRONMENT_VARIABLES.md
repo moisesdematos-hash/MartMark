@@ -25,4 +25,4 @@ Keep service-role, payment, email and AI credentials out of all `NEXT_PUBLIC_*` 
 
 ## Current status
 
-The local Supabase URL and publishable key are stored in the ignored `.env.local` file. This does not activate a database integration. No server-side credentials are configured. Payment, email, database and AI integrations remain inactive until their implementation and phase gates are complete.
+The development Supabase URL and publishable key remain in the ignored `.env.local` file. A separate staging project's URL and publishable key are configured only in the Vercel Preview environment. The staging endpoint responds successfully, but the application does not consume these values yet; no database schema, Auth/RLS, or server-side credentials are configured. Payment, email, database and AI integrations remain inactive until their implementation and phase gates are complete.
