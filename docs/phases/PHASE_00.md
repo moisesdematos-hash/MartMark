@@ -4,7 +4,7 @@
 
 `IN_PROGRESS`
 
-Phase 0 is not PASSED. CI is green on `main`, and an active ruleset protects `main` with pull-request and CI requirements. Secret scanning, isolated Supabase staging, Vercel preview/staging, private Sites publication, and approval/recovery evidence remain open.
+Phase 0 is not PASSED. CI is green on `main`, an active ruleset protects `main` with pull-request and CI requirements, and Gitleaks now scans the PR and main workflow. Native GitHub secret scanning/push protection, isolated Supabase staging, Vercel preview/staging, private Sites publication, and approval/recovery evidence remain open.
 
 ## Objective
 
@@ -60,6 +60,7 @@ None. No database schema or provider integration is implemented in Phase 0.
 - The full dependency audit reports moderate `fflate` findings in `vinext`'s `@vercel/og` chain and a high `braces` advisory (GHSA-vfj7-8cjw-p6xm) in development/build tooling. GitHub's advisory lists no patched version as of 2026-10-03. The production-only audit passes with zero vulnerabilities. The full audit stays visible as an advisory while the production audit remains blocking. The CI threshold is high.
 - GitHub Actions runs 10 and 11 passed on PR #6. PR #6 was merged into `main` at commit `b11aa88` on 2026-10-03. The first post-merge run (run 12) passed install, lint, typecheck and unit tests, then failed at the full dependency audit; build and integration steps were skipped because of the high `braces` advisory noted above. The production-only audit returned zero vulnerabilities.
 - PR #7 merged the audit policy into `main` at commit `74dec89` on 2026-10-03. Main CI run 17 (`37140887773`) passed clean install, lint, typecheck, unit tests, production audit, advisory full audit, build and integration checks.
+- PR #9 added a commit-pinned Gitleaks secret scan to the required `Validate application` workflow, with read-only pull request token permissions and comments/artifact uploads disabled. The PR scan passed; after merge at `355b02c`, main CI run `37147962904` also passed.
 - Negative authorization, persistence and concurrency suites are not applicable until their later phases implement those capabilities.
 - No financial or identity assertions are claimed.
 
@@ -69,7 +70,7 @@ None. No database schema or provider integration is implemented in Phase 0.
 - Financial and KYC actions remain unavailable.
 - The RLS document is a draft planning matrix, not deployed policy.
 - An active GitHub ruleset protects `main`: pull requests and `Validate application` are required, deletion and non-fast-forward updates are blocked, and no bypass actors are configured. It does not require an approval review.
-- Secret scanning/push protection, rate limits, threat model, webhook verification and audit persistence remain open.
+- The Gitleaks scan runs in the CI workflow. Native GitHub secret scanning and push protection are still unverified; rate limits, threat model, webhook verification and audit persistence also remain open.
 
 ## Acceptance criteria
 
@@ -78,7 +79,7 @@ None. No database schema or provider integration is implemented in Phase 0.
 - [x] Initial RLS matrix and secret naming plan documented.
 - [x] Active GitHub ruleset on `main` requires a pull request and the `Validate application` check, and blocks deletion and non-fast-forward updates.
 - [ ] GitHub secret scanning and push protection enabled and verified.
-- [x] CI and dependency audits configured; post-merge main run 17 passes.
+- [x] CI, Gitleaks scanning and dependency audits configured; post-merge main run `37147962904` passes.
 - [x] Application lint, typecheck and production build pass.
 - [ ] Supabase development and staging environments created and isolated.
 - [ ] Vercel preview/staging configuration and rollback documented.
@@ -86,11 +87,11 @@ None. No database schema or provider integration is implemented in Phase 0.
 
 ## Blockers
 
-1. GitHub secret scanning and push protection are not yet verified.
+1. Native GitHub secret scanning and push protection are not yet verified. Gitleaks now scans commits in CI, which is separate evidence and does not prove these repository settings are enabled.
 2. Supabase development/staging and Vercel preview/staging are not connected or isolated.
 3. The private Sites version has not been packaged or published; the sandbox blocked passing its temporary source credential to the workflow over stdin.
 4. Required approval, backup/restore and recovery evidence is not recorded.
 
 ## Remaining debt
 
-Enable and verify secret scanning/push protection, connect isolated Supabase development/staging and Vercel preview/staging, complete owner-private Sites packaging/publication, and record approval and recovery evidence before marking this phase PASSED. Do not start Phase 1 until every acceptance criterion is satisfied. The MartMark workspace remains a local preview until the private Sites version is successfully published.
+Enable and verify native GitHub secret scanning/push protection, connect isolated Supabase development/staging and Vercel preview/staging, complete owner-private Sites packaging/publication, and record approval and recovery evidence before marking this phase PASSED. Do not start Phase 1 until every acceptance criterion is satisfied. The MartMark workspace remains a local preview until the private Sites version is successfully published.
