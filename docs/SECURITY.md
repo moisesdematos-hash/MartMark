@@ -18,7 +18,8 @@ This is a Foundation-stage workspace. It has no user accounts, payment processin
 - `.env.example` contains names only, with blank values.
 - `.gitignore` excludes `.env*`, dependency trees, build output and local runtime state.
 - GitHub Actions requests `contents: read` only and contains no deployment credentials.
-- Dependency audit and Dependabot are configured as source files; neither has run on GitHub yet.
+- GitHub Actions runs dependency audits. The full tree reports a high `braces` advisory in development/build tooling with no patched version listed; the production-only audit reports zero vulnerabilities.
+- Dependabot update configuration is committed and GitHub has started update runs.
 - A unit test guards the production-readiness and finance-disabled flags.
 
 ## Open controls
