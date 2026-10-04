@@ -2,19 +2,34 @@
 
 ## Intended platform architecture
 
-The requested V1 target is GitHub Actions → Vercel previews/staging/production → isolated Supabase environments. The `martmark` Vercel project was briefly connected to the `moisesdematos-hash/MartMark` GitHub repository. GitHub Dependabot branches unexpectedly produced deployments marked as Production, so the Git connection was removed and all six deployments created during the connection were deleted. No deployment is currently available; the Phase 0 gate is still open.
+The V1 target is GitHub Actions → Vercel previews/staging/production → isolated Supabase environments. Vercel Git integration remains disconnected because branch-based automatic deployments previously produced deployments marked Production. Automatic Git deployments are disabled in `vercel.json` until the Phase 0 gate passes.
 
 ## Current preview
 
-The Foundation interface is running as a local preview in Codex. Its source is registered to a private Sites workspace for packaging, but no version has been published. This preview does not establish the Vercel/Supabase deployment architecture for the commerce platform.
+The MartMark Foundation workspace is available as a protected Vercel Preview:
+[https://martmark-nq040q893-moisesdematos-hashs-projects.vercel.app](https://martmark-nq040q893-moisesdematos-hashs-projects.vercel.app)
+
+On 2026-10-04, the deployment reached Ready with `target: preview`; `vercel inspect` confirmed that target, and `vercel curl /` returned the application HTML successfully. Vercel Deployment Protection is enabled, so opening the URL may require an authorized account. The preview displays the Phase 0 foundation workspace; it does not implement Supabase authentication, database access or commerce operations.
 
 ## Vercel preview setup
 
-- Created the `martmark` Vercel project in the authenticated personal account and linked the local repository directory to it.
-- The Vercel config selects the native Next.js framework and runs `npm run build:vercel` (`next build`); the Codex local preview continues to use Vinext and Cloudflare.
-- A separate Supabase staging project is configured with `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` in Vercel's Preview environment only. Its Auth health endpoint returned HTTP 200. Production has no Supabase values.
-- Automatic Git deployments are disabled in `vercel.json` until the Phase 0 release gate is passed. The Vercel project is currently disconnected from GitHub.
-- PR #12's Linux CI passed the native Next.js build and was merged at `1ecef20`. The six deployments created during the Git connection attempt were removed, including deployments marked as Production. No manual deployment was started.
+- The `martmark` project uses the native Next.js framework and `npm run build:vercel` (`next build`). The local Codex preview continues to use Vinext and Cloudflare.
+- A separate Supabase staging project is configured with `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` in Vercel's Preview environment only. The Auth health endpoint returned HTTP 200. These public values do not activate a database integration; no service-role key is configured.
+- Automatic Git deployments remain disabled and the Vercel project is disconnected from GitHub.
+- The first successful deployment on an empty Vercel project was automatically assigned to Production and received the project alias. It was removed immediately after verification. A subsequent deployment was confirmed as Preview; no Production deployment currently exists.
+- Future CLI deployments must omit `--prod`. Confirm every new deployment with `vercel inspect <deployment-url>` and require `target: preview` before sharing it.
+- The Preview build completed successfully on Vercel and served the application page. Its immutable deployment URL is the current test target.
+
+## Rollback and recovery
+
+Preview rollback has a documented procedure but has not been exercised against a previous known-good Preview:
+
+1. Keep the immutable URL of the last known-good Preview.
+2. If a new Preview fails, inspect it and remove only that failed Preview with `vercel rm <deployment-url> --yes`.
+3. Redeploy the last known-good source revision with `vercel deploy` (never `--prod`), then verify its build, HTTP response and `target: preview`.
+4. Do not connect GitHub or promote a Preview to Production until the Phase 0 release gate and production safeguards are approved.
+
+The accidental Production deployment was removed, and the deployments list confirmed that only the Ready Preview remained. This does not count as a tested restore from a prior known-good application version.
 
 ## Release policy
 
@@ -23,6 +38,6 @@ The Foundation interface is running as a local preview in Codex. Its source is r
 - Keep development, staging and production credentials and databases isolated.
 - Record rollback and recovery steps before enabling financial operations.
 
-## Blocker
+## Remaining blockers
 
-The local source packaging workflow was blocked when the environment rejected the required private repository credential handoff. The Supabase staging endpoint is reachable and separate from development. A Vercel preview/staging deployment, rollback validation and a deployment URL are still unavailable. Reconnect Git only after preview and production branch behavior is verified.
+The Vercel Preview is available, but the Phase 0 gate remains open. Owner-private Sites packaging/publication, a rollback exercise from a known-good version, and approval/recovery evidence are still outstanding. The Supabase staging project is separate and reachable, but the app has no active auth or database integration.
